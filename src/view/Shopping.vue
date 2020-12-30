@@ -1,6 +1,6 @@
 <template>
   <div id="shopping">
-    <!-- 模态框 -->
+    <!-- 删除商品 -->
     <transition>
       <div class="modal_shadow" v-if="showModal">
         <div class="modal">
@@ -12,12 +12,14 @@
         </div>
       </div>
     </transition>
-
+    <!-- 购物车界面 -->
+    <!-- 头部 -->
     <div class="header">
       <span>购物车</span>
       <span @click="changeForm" v-if="showCal">编辑</span>
       <span @click="changeForm" v-if="!showCal">完成</span>
     </div>
+    <!-- 循环体（店铺） -->
     <div class="shops" v-for="(item,index) in Shops" :key="index" v-if="!item.isDeleted&&!isEmpty">
       <div class="shop">
         <input type="checkbox" class="checkbox" :checked="item.isChecked" @click="shopCheckAll(item)">
@@ -64,17 +66,16 @@
         <button class="btn_computed" @click="deleteProduct">删除({{totalAmount}})</button>
       </div>
     </div>
-
     <!-- 清空购物车后显示内容 -->
     <div class="empty" v-if="isEmpty">
       <div class="empty_logo"></div>
       <div class="empty_title">您的购物车空空的哦~</div>
       <div class="empty_title">去看看心仪的商品吧~</div>
       <div class="btn_url">
-        <router-link class="btn_url_link" to="/index">立即去购物</router-link>
+        <router-link class="btn_url_link" to="/classify">立即去购物</router-link>
       </div>
     </div>
-
+    <!-- 菜单栏组件 -->
     <Footer :isChoose=[false,true,false,true,true,false,false,true]></Footer>
   </div>
 </template>
@@ -185,6 +186,7 @@
       };
     },
     methods: {
+      //减少商品数量
       sub(product) {
         this.Shops.forEach((item) => {
           item.Products.forEach((i) => {
@@ -195,6 +197,7 @@
           });
         });
       },
+      //添加商品数量
       add(product) {
         this.Shops.forEach((item) => {
           item.Products.forEach((i) => {
@@ -205,6 +208,7 @@
           });
         });
       },
+      //单选商品
       getCheckProduct(product) {
         this.Shops.forEach((item) => {
           let cnt = 0;
@@ -218,7 +222,6 @@
           });
 
           //如果选中的数量和该商店中商品数量一致,那么商店check自动勾选
-
           if (cnt == item.Products.length) {
             this.$set(item, "isChecked", true);
           } else {
@@ -226,6 +229,7 @@
           }
         });
       },
+      //本店的商品全选
       shopCheckAll(shop) {
         this.Shops.forEach((item) => {
           if (shop.shopId == item.shopId) {
@@ -244,6 +248,7 @@
           }
         });
       },
+      //购物车中的商品全选
       tableCheckAll() {
         this.flagCheck = !this.flagCheck;
         console.log(this.flagCheck);
@@ -269,6 +274,8 @@
           });
         }
       },
+
+      //商品数量至少为1个
       dataCheck(index) {
         this.Shops.forEach((item) => {
           if (item.Products[index].amount < 1) {
@@ -276,12 +283,15 @@
           }
         });
       },
+      //改变页面中的样式(显示)
       changeForm() {
         this.showCal = !this.showCal;
       },
+      //取消
       cancel() {
         this.showModal = false;
       },
+      //确定
       confirm() {
         let totalCount = 0;
         this.Shops.forEach((item) => {
@@ -305,6 +315,7 @@
           this.isEmpty = true;
         }
       },
+      //删除商品
       deleteProduct() {
         this.showModal = true;
       },
@@ -329,6 +340,7 @@
       });
     },
     computed: {
+      //判断所有店铺中是否全选,如果是,则把大全选选中
       toAll() {
         let cnt = 0;
         this.Shops.forEach((item) => {
@@ -339,6 +351,7 @@
         let flag = (cnt == this.Shops.length);
         return flag;
       },
+      //总计
       totalPrice() {
         let price = 0;
         this.Shops.forEach((item) => {
@@ -350,6 +363,7 @@
         });
         return price;
       },
+      //选中数量(删除)
       totalAmount() {
         let totalAmount = 0;
         this.Shops.forEach((item) => {
