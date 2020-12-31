@@ -12,6 +12,9 @@
     name: 'App',
     components:{
       Footer,
+    },
+    created(){
+    this.$router.replace({ path:'/' })
     }
   }
 </script>

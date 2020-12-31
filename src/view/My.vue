@@ -2,7 +2,7 @@
   <div id="my">
     {{msg}}
     <!-- 菜单栏组件 -->
-   <!-- <Footer :isChoose=[false,true,false,true,true,false,false,true]></Footer> -->
+   <!-- <Footer :isChoose=[false,true,false,true,false,true,true,false]></Footer> -->
   </div>
 </template>
 
