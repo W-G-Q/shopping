@@ -41,7 +41,7 @@
               <div class="products_price">￥{{p.price}}</div>
               <div class="products_num">
                 <button class="op_btn sub" @click="sub(p)" :class="{active:p.amount==1}"></button>
-                <input type="number" v-model="p.amount" @change="dataCheck(index)">
+                <input type="number" v-model="p.amount" @change="dataCheck(p,index)">
                 <button class="op_btn add" @click="add(p)"></button>
               </div>
             </div>
@@ -76,16 +76,16 @@
       </div>
     </div>
     <!-- 菜单栏组件 -->
-    <Footer :isChoose=[false,true,false,true,true,false,false,true]></Footer>
+    <!-- <Footer :isChoose=[false,true,false,true,true,false,false,true]></Footer> -->
   </div>
 </template>
 
 <script>
-  import Footer from '../components/Footer.vue';
+  // import Footer from '../components/Footer.vue';
   export default {
-    components: {
+    /* components: {
       Footer,
-    },
+    }, */
     name: 'Shopping',
     data() {
       return {
@@ -191,8 +191,10 @@
         this.Shops.forEach((item) => {
           item.Products.forEach((i) => {
             if (i.id == product.id && product.amount != 1) {
-              this.$set(i, "amount", --product.amount);
-              this.$set(i, "total", i.amount * i.price);
+              i.amount = --product.amount;
+              i.total = i.amount * i.price;
+              // this.$set(i, "amount", --product.amount);
+              // this.$set(i, "total", i.amount * i.price);
             }
           });
         });
@@ -202,8 +204,10 @@
         this.Shops.forEach((item) => {
           item.Products.forEach((i) => {
             if (i.id == product.id) {
-              this.$set(i, "amount", ++product.amount);
-              this.$set(i, "total", i.amount * i.price);
+              i.amount = ++product.amount;
+               i.total = i.amount * i.price;
+              // this.$set(i, "amount", ++product.amount);
+              // this.$set(i, "total", i.amount * i.price);
             }
           });
         });
@@ -214,7 +218,8 @@
           let cnt = 0;
           item.Products.forEach((i) => {
             if (i.id == product.id) {
-              this.$set(i, "isChecked", !product.isChecked);
+              i.isChecked = !product.isChecked;
+              // this.$set(i, "isChecked", !product.isChecked);
             }
             if (i.isChecked) {
               cnt++;
@@ -223,9 +228,11 @@
 
           //如果选中的数量和该商店中商品数量一致,那么商店check自动勾选
           if (cnt == item.Products.length) {
-            this.$set(item, "isChecked", true);
+            item.isChecked = true;
+            // this.$set(item, "isChecked", true);
           } else {
-            this.$set(item, "isChecked", false);
+            item.isChecked = false;
+            // this.$set(item, "isChecked", false);
           }
         });
       },
@@ -233,17 +240,20 @@
       shopCheckAll(shop) {
         this.Shops.forEach((item) => {
           if (shop.shopId == item.shopId) {
-            this.$set(item, "isChecked", !shop.isChecked);
+            item.isChecked  = !shop.isChecked;
+            // this.$set(item, "isChecked", !shop.isChecked);
           }
           if (item.isChecked) {
             item.Products.forEach((i) => {
               if (!i.isChecked) {
-                this.$set(i, "isChecked", true);
+                i.isChecked = true;
+                // this.$set(i, "isChecked", true);
               }
             });
           } else {
             item.Products.forEach((i) => {
-              this.$set(i, "isChecked", false);
+              i.isChecked = false;
+              // this.$set(i, "isChecked", false);
             });
           }
         });
@@ -258,11 +268,13 @@
             item.Products.forEach((i) => {
               if (!i.soldOut) {
                 cnt++;
-                this.$set(i, "isChecked", true);
+                i.isChecked = true;
+                // this.$set(i, "isChecked", true);
               }
             });
             if (cnt == item.Products.length) {
-              this.$set(item, "isChecked", true);
+              item.isChecked = true;
+              // this.$set(item, "isChecked", true);
             }
           });
         } else {
@@ -276,12 +288,15 @@
       },
 
       //商品数量至少为1个
-      dataCheck(index) {
-        this.Shops.forEach((item) => {
-          if (item.Products[index].amount < 1) {
-            this.$set(item.Products[index], "amount", 1);
-          }
-        });
+      dataCheck(product,index) {
+        // this.Shops.forEach((item) => {
+        //   if (item.Products[index].amount < 1) {
+        //     this.$set(item.Products[index], "amount", 1);
+        //   }
+        // });
+        if(product.amount<1){
+          product.amount = 1;
+        }
       },
       //改变页面中的样式(显示)
       changeForm() {
@@ -298,7 +313,8 @@
           let cnt = 0;
           item.Products.forEach((i) => {
             if (i.isChecked) {
-              this.$set(i, "isDeleted", true);
+              i.isDeleted = true;
+              // this.$set(i, "isDeleted", true);
               cnt++;
             }
             if (!i.isDeleted) {
@@ -306,7 +322,8 @@
             }
           });
           if (cnt == item.Products.length) {
-            this.$set(item, "isDeleted", true);
+            item.isDeleted = true;
+            // this.$set(item, "isDeleted", true);
           }
         });
         this.$EventBus.$emit("cartCount", totalCount);

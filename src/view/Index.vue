@@ -1,14 +1,15 @@
 <template>
   <div id="index">
     {{msg}}
-    <Footer :isChoose=[true,false,false,true,false,true,false,true]></Footer>
+    <!-- 菜单栏组件 -->
+    <Footer :isChoose=[false,true,false,true,true,false,false,true]></Footer>
   </div>
 </template>
 
 <script>
   import Footer from '../components/Footer.vue'
   export default {
-    components:{
+    components: {
       Footer,
     },
     name: 'Index',

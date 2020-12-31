@@ -1,16 +1,17 @@
 <template>
   <div id="classify">
     {{msg}}
-    <Footer :isChoose=[false,true,true,false,false,true,false,true]></Footer>
+    <!-- 菜单栏组件 -->
+    <!-- <Footer :isChoose=[false,true,false,true,true,false,false,true]></Footer> -->
   </div>
 </template>
 
 <script>
-  import Footer from '../components/Footer.vue'
+  // import Footer from '../components/Footer.vue'
   export default {
-    components:{
+  /*  components: {
       Footer,
-    },
+    }, */
     name: 'Classify',
     data() {
       return {
